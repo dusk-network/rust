@@ -38,17 +38,10 @@ jobs:
         run: sudo apt update && sudo apt install -y ninja-build
 
       - name: Setup dependencies
-        if: endsWith(matrix.os, '-large')
+        if: startsWith(matrix.os, 'macos')
         run: |
           brew install ninja llvm &&
-          export PATH="/usr/local/opt/llvm/bin:$PATH" &&
-          clang --version
-
-      - name: Setup dependencies
-        if: endsWith(matrix.os, '-xlarge')
-        run: |
-          brew install ninja llvm &&
-          export PATH="/opt/homebrew/opt/llvm/bin:$PATH" &&
+          brew link --force llvm &&
           clang --version
 
       - name: Run build
