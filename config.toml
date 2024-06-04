@@ -1,8 +1,8 @@
 change-id = 125535
 
 [llvm]
-download-ci-llvm = true
-#download-ci-llvm = false
+#download-ci-llvm = true
+download-ci-llvm = false
 #targets = "AArch64;X86;WebAssembly"
 #experimental-targets = ""
 #version-suffix = "-dusk"
