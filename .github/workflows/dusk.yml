@@ -35,18 +35,11 @@ jobs:
 
       - name: Setup dependencies
         if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt update &&
-          sudo apt install -y ninja-build wget lsb-release software-properties-common gnupg &&
-          wget https://apt.llvm.org/llvm.sh &&
-          chmod +x llvm.sh &&
-          sudo ./llvm.sh 18
+        run: sudo apt update && sudo apt upgrade -y ninja-build
 
       - name: Setup dependencies
         if: startsWith(matrix.os, 'macos')
-        run: |
-          brew install ninja llvm z3
-          brew link z3
+        run: brew install ninja
 
       - name: Run build
         run: ./x.py dist --host ${{ matrix.target }}
