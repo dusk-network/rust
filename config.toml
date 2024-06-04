@@ -1,20 +1,7 @@
 change-id = 125535
 
 [llvm]
-#download-ci-llvm = true
-download-ci-llvm = false
-#targets = "AArch64;X86;WebAssembly"
-#experimental-targets = ""
-#version-suffix = "-dusk"
-
-[target.x86_64-unknown-linux-gnu]
-llvm-config = "/usr/lib/llvm-18/bin/llvm-config"
-
-[target.x86_64-apple-darwin]
-llvm-config = "/usr/local/opt/llvm/bin/llvm-config"
-
-[target.aarch64-apple-darwin]
-llvm-config = "/opt/homebrew/opt/llvm/bin/llvm-config"
+download-ci-llvm = true
 
 [build]
 target = ["wasm32-unknown-unknown", "wasm64-unknown-unknown"]
