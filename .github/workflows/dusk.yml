@@ -44,7 +44,9 @@ jobs:
 
       - name: Setup dependencies
         if: startsWith(matrix.os, 'macos')
-        run: brew install ninja llvm z3 zstd
+        run: |
+          brew install ninja llvm z3
+          brew link z3
 
       - name: Run build
         run: ./x.py dist --host ${{ matrix.target }}
