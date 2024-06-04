@@ -25,6 +25,8 @@ extended = true
 channel = "nightly"
 description = "Dusk Network's Smart Contract Compiler"
 
+lld = true
+
 [dist]
 compression-formats = ["gz"]
 compression-profile = "best"
