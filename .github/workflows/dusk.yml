@@ -35,15 +35,11 @@ jobs:
 
       - name: Setup dependencies
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt update && sudo apt install -y ninja-build
+        run: sudo apt update && sudo apt install -y ninja-build llvm
 
       - name: Setup dependencies
         if: startsWith(matrix.os, 'macos')
-        run: |
-          brew install ninja llvm &&
-          brew link --force llvm &&
-          clang --version &&
-          llc --version
+        run: brew install ninja llvm
 
       - name: Run build
         run: ./x.py dist --host ${{ matrix.target }}
