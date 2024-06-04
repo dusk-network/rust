@@ -42,7 +42,8 @@ jobs:
         run: |
           brew install ninja llvm &&
           brew link --force llvm &&
-          clang --version
+          clang --version &&
+          llc --version
 
       - name: Run build
         run: ./x.py dist --host ${{ matrix.target }}
