@@ -1,0 +1,30 @@
+change-id = 131075
+
+[build]
+build-stage = 2
+test-stage = 2
+doc-stage = 2
+
+target = [
+    "${HOST}",
+    "wasm32-unknown-unknown",
+    "wasm64-unknown-unknown"
+]
+
+extended = true
+
+[llvm]
+download-ci-llvm = false
+
+[rust]
+channel = "nightly"
+description = "Dusk Network's Smart Contract Compiler"
+
+download-rustc = false
+lld = true
+
+llvm-bitcode-linker = true
+
+[dist]
+compression-formats = ["gz"]
+compression-profile = "best"
