@@ -18,14 +18,17 @@ jobs:
           x86_64-unknown-linux-gnu,
           x86_64-apple-darwin,
           aarch64-apple-darwin,
+          aarch64-unknown-linux-gnu,
         ]
         include:
-          - os: ubuntu-latest
+          - os: linux-gh-4-16-150
             target: x86_64-unknown-linux-gnu
           - os: macos-latest-large
             target: x86_64-apple-darwin
           - os: macos-latest-xlarge
             target: aarch64-apple-darwin
+          - os: arm-linux
+            target: aarch64-unknown-linux-gnu
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository
@@ -34,11 +37,11 @@ jobs:
           fetch-depth: 16
 
       - name: Install dependencies
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'linux-gh-4-16-150' || matrix.os == 'arm-linux'
         run: sudo apt update && sudo apt install -y ninja-build
 
       - name: Install dependencies
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-latest-large' || matrix.os == 'macos-latest-xlarge' 
         run: brew install ninja openssl@3
 
       - name: Run build
