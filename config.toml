@@ -20,7 +20,7 @@ target = ["wasm32-unknown-unknown", "wasm64-unknown-unknown"]
 
 # If a build of LLVM is available for the CI use it
 [llvm]
-download-ci-llvm = "if-available"
+download-ci-llvm = false
 
 [rust]
 # We have several defaults in bootstrap that depend on whether the channel
