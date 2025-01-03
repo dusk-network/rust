@@ -1,0 +1,43 @@
+# Instructions for GitHub to sync the fork with upstream rust.
+
+name: Dusk Sync
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  Dusk-Sync:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Add Upstream
+        run: |
+          git remote add upstream https://github.com/rust-lang/rust.git
+          git fetch upstream
+      
+      - name: Set Up Git User
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync
+        run: |
+          LATEST_COMMON_COMMIT=$(git merge-base master upstream/stable)
+          STABLE_MASTER_BASE_COMMIT=$(git merge-base upstream/master upstream/stable)
+          if [ $LATEST_COMMON_COMMIT != $STABLE_MASTER_BASE_COMMIT ]
+          then
+            git checkout master
+            git merge $STABLE_MASTER_BASE_COMMIT
+            if [ $? -ne 0 ]
+            then
+              exit 1
+            fi
+            git push
+          else
+            echo "Up to date"
+          fi
