@@ -34,7 +34,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 16
+          fetch-depth: 0
 
       - name: Setup dependencies
         if: matrix.os == 'ubuntu-latest'
@@ -44,8 +44,23 @@ jobs:
         if: startsWith(matrix.os, 'macos')
         run: |
           brew install ninja gettext &&
-          brew link --force gettext
+          brew link --force gettext &&
+          brew install llvm
 
+      - name: Change cc and ar to wasm-supported versions
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          LLVM_PATH=$(brew --prefix llvm)
+          echo "
+          [target.wasm32-unknown-unknown]
+          cc = \"$LLVM_PATH/bin/clang\"
+          ar = \"$LLVM_PATH/bin/llvm-ar\"
+
+          [target.wasm64-unknown-unknown]
+          cc = \"$LLVM_PATH/bin/clang\"
+          ar = \"$LLVM_PATH/bin/llvm-ar\"
+          " >> config.template.toml
+          
       - name: Generate configuration
         run: |
           HOST=${{ matrix.target }} envsubst < config.template.toml > config.toml &&
@@ -59,7 +74,10 @@ jobs:
         run: brew install ninja openssl@3
 
       - name: Run build
-        run: ./x.py dist
+
+        run: |
+          git remote add upstream https://github.com/rust-lang/rust.git
+          ./x.py dist
 
       - name: Set artifact name
         id: artifact-name
