@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - v0.3.0-rc
+      - release-0.3.0-rc
 
 name: Dusk Contract Compilers
 
