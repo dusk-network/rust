@@ -7,6 +7,7 @@ on:
       - "v*.*.*"
     branches:
       - master
+      - release-0.3.0-rc
 
 name: Dusk Contract Compilers
 
@@ -89,7 +90,7 @@ jobs:
           fi
 
       - name: Upload build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.artifact-name.outputs.name }}
           path: build/dist/
