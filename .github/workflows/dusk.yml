@@ -22,7 +22,16 @@ jobs:
           aarch64-unknown-linux-gnu,
         ]
         include:
-          - os: linux-gh-4-16-150
+          # Using Ubuntu 22.04 to keep min. glibc version as 2.35.
+          #
+          # The reason for doing this is so that the CI can pass for the
+          # toolchain upgrade.
+          # The min. glibc version required for a rust toolchain is the version present in the environment 
+          # that the toolchain is built in.
+          # At this time, core uses Ubuntu 22.04 (glibc 2.35). Since most tests in the rusk CI run on core, 
+          # then building on the `linux-gh-4-16-150` runner which uses Ubuntu 24.04 (glibc 2.39) will lead 
+          # to incompatibilities.
+          - os: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
           - os: macos-latest-large
             target: x86_64-apple-darwin
@@ -37,14 +46,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup dependencies
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt update && sudo apt install -y ninja-build
+      - name: Free Space
+        if: matrix.os == 'ubuntu-22.04'
+        uses: jlumbroso/free-disk-space@main
+
+      - name: Install dependencies
+        if: matrix.os == 'ubuntu-22.04' || matrix.os == 'arm-linux'
+        run: sudo apt update && sudo apt install -y ninja-build clang
 
       - name: Setup dependencies
         if: startsWith(matrix.os, 'macos')
         run: |
-          brew install ninja gettext &&
+          brew install ninja gettext openssl@3 &&
           brew link --force gettext &&
           brew install llvm
 
@@ -66,13 +79,6 @@ jobs:
         run: |
           HOST=${{ matrix.target }} envsubst < config.template.toml > config.toml &&
           cat config.toml
-      - name: Install dependencies
-        if: matrix.os == 'linux-gh-4-16-150' || matrix.os == 'arm-linux'
-        run: sudo apt update && sudo apt install -y ninja-build
-
-      - name: Install dependencies
-        if: matrix.os == 'macos-latest-large' || matrix.os == 'macos-latest-xlarge' 
-        run: brew install ninja openssl@3
 
       - name: Run build
 
