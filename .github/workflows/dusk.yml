@@ -85,6 +85,13 @@ jobs:
         run: |
           git remote add upstream https://github.com/rust-lang/rust.git
           ./x.py dist
+          OUT_DIR="build/dist"
+          mkdir "$OUT_DIR/selected-subset"
+          mv "$OUT_DIR/rust-nightly-${{ matrix.target }}.tar.gz" "$OUT_DIR/selected-subset"
+          mv "$OUT_DIR/rust-src-nightly.tar.gz" "$OUT_DIR/selected-subset"
+          mv "$OUT_DIR/rust-std-nightly-${{ matrix.target }}.tar.gz" "$OUT_DIR/selected-subset"
+          mv "$OUT_DIR/rust-std-nightly-wasm32-unknown-unknown.tar.gz" "$OUT_DIR/selected-subset"
+          mv "$OUT_DIR/rust-std-nightly-wasm64-unknown-unknown.tar.gz" "$OUT_DIR/selected-subset"
 
       - name: Set artifact name
         id: artifact-name
@@ -99,4 +106,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.artifact-name.outputs.name }}
-          path: build/dist/
+          path: build/dist/selected-subset
